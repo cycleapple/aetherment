@@ -49,12 +49,23 @@
 		<DalamudLibPath>$(HOME)/Library/Application Support/XIV on Mac/dalamud/Hooks/dev/</DalamudLibPath>
 	</PropertyGroup>
 	
+    <PropertyGroup>
+        <!-- Keep managed release packaging out of Cargo's intermediate tree. -->
+        <OutputPath>$(MSBuildProjectDirectory)/bin/$(Configuration)/</OutputPath>
+        <DalamudApiLevel>14</DalamudApiLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="../../lib/bcryptprimitives.dll" Link="bcryptprimitives.dll" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="../../target/x86_64-pc-windows-msvc/release/aetherment_core.dll"
+              Condition="Exists('../../target/x86_64-pc-windows-msvc/release/aetherment_core.dll')"
+              Link="aetherment_core.dll" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 	<Target Name="PackagePlugin" AfterTargets="Build">
 		<DalamudPackager ProjectDir="$(ProjectDir)" OutputPath="$(OutputPath)" AssemblyName="$(AssemblyName)" MakeZip="false"/>
 	</Target>
 	
 	<ItemGroup>
-		<PackageReference Include="DalamudPackager" Version="2.1.12"/>
+		<PackageReference Include="DalamudPackager" Version="14.0.1"/>
 		<Reference Include="Dalamud">
 			<HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
 			<Private>false</Private>
@@ -73,14 +84,6 @@
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="SharpDX">
-			<HintPath>$(DalamudLibPath)SharpDX.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="SharpDX.Direct3D11">
-			<HintPath>$(DalamudLibPath)SharpDX.Direct3D11.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
